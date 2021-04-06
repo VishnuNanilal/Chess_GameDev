@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,9 +20,9 @@ public class DragObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             canvasGroup.blocksRaycasts = false;
 
             SetCurrentPiece(eventData.pointerDrag);
+            SetCurrentPlaceHolder(eventData.pointerDrag);
             Debug.Log(GameController.instance.currentPiece);
     }
-
     public void OnDrag(PointerEventData eventData)
     {
         //Debug.Log("On Drag");
@@ -33,6 +34,8 @@ public class DragObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1;
+        SetCurrentPiece(null);
+        
         Debug.Log("End Drag");
     }
 
@@ -40,4 +43,11 @@ public class DragObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         GameController.instance.currentPiece = draggedObj;
     }
+
+
+    void SetCurrentPlaceHolder(GameObject pointerDrag)
+    {
+        GameController.instance.currentPlaceHolder = pointerDrag.GetComponent<PieceStats>().PlaceHolderOfThisPiece;
+    }
+
 }
