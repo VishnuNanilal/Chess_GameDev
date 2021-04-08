@@ -30,7 +30,6 @@ public class PieceStats : MonoBehaviour
     {
         currentXPos = initXpos;
         currentYPos = initYpos;
-        
     }
 
     public void SetNewPos(int PlaceHolderXPos, int PlaceHolderyYPos)

@@ -8,21 +8,19 @@ using UnityEngine.EventSystems;
 public class DropSlot : MonoBehaviour, IDropHandler
 {   
     public Algorithms algo;
-    public GameObject thisPlaceHolder;
     PlaceHolderStats placeHolderStats;
 
     void Start()
     {
         placeHolderStats = GetComponent<PlaceHolderStats>();
-        thisPlaceHolder = gameObject;
     }
     public void OnDrop(PointerEventData eventData)
     {
-        bool dropped = false;
-        bool isSameColors; //To see if the dragged piece and occupying piece are of the same color.d
+        if (!GameController.instance.isCorrectTurn)
+            return;
 
-      
-
+        bool isPieceDropped = false;
+        GameController.instance.isCorrectTurn =false;
 
         if (eventData != null)
         {
@@ -32,41 +30,50 @@ public class DropSlot : MonoBehaviour, IDropHandler
                 {
                     PlacePiece(eventData.pointerDrag);
                     UnOccupyPrevPlaceHolder();
-                    dropped = true;
+                    isPieceDropped = true;
+
+                    GameController.instance.isWhitesTurn = !GameController.instance.isWhitesTurn;
+
+                    if (GameController.instance.isWhitesTurn)
+                        GameController.instance.turnIndicator.color = Color.white;
+                    else
+                        GameController.instance.turnIndicator.color = Color.black;
+
                 }
 
             }
         }
-        if (!dropped)
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<PieceStats>().PlaceHolderOfThisPiece.GetComponent<RectTransform>().anchoredPosition;
+        if (!isPieceDropped)
+            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GameController.instance.activePlaceHolder.GetComponent<RectTransform>().anchoredPosition;
 
     }
     void PlacePiece(GameObject draggedPiece)
     {
         if (placeHolderStats.isOccupied)
         {
-            Destroy(placeHolderStats.occupiedPiece);
+            placeHolderStats.occupiedPiece.SetActive(false);
         }
 
         draggedPiece.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition; //Set Anchor position to that of the new cell
         draggedPiece.GetComponent<PieceStats>().SetNewPos(placeHolderStats.xPos, placeHolderStats.yPos);              //passes PH's x and y pos to be set as the current object's x and y 
      
         placeHolderStats.occupiedPiece = draggedPiece;                                                                //Set dragged piece as piece of this cell.
-        draggedPiece.GetComponent<PieceStats>().PlaceHolderOfThisPiece = thisPlaceHolder;                             //Set this PH as the PH of the dragged piece.
+        draggedPiece.GetComponent<PieceStats>().PlaceHolderOfThisPiece = gameObject;                             //Set this PH as the PH of the dragged piece.
 
         placeHolderStats.isOccupied = true;
     }
     void UnOccupyPrevPlaceHolder()
     {
-        GameController.instance.currentPlaceHolder.GetComponent<PlaceHolderStats>().isOccupied = false;
-        GameController.instance.currentPlaceHolder.GetComponent<PlaceHolderStats>().occupiedPiece = null;
+        GameController.instance.activePlaceHolder.GetComponent<PlaceHolderStats>().isOccupied = false;
+        GameController.instance.activePlaceHolder.GetComponent<PlaceHolderStats>().occupiedPiece = null;
     }
 
     private bool IsOccupiable(GameObject draggedPiece)
-    {
+    {   
+
         if (!placeHolderStats.isOccupied)
             return true;
-        if ((draggedPiece.GetComponent<PieceStats>().isWhite && placeHolderStats.occupiedPiece.GetComponent<PieceStats>().isWhite)||(!draggedPiece.GetComponent<PieceStats>().isWhite && !placeHolderStats.occupiedPiece.GetComponent<PieceStats>().isWhite))
+        if ((draggedPiece.GetComponent<PieceStats>().isWhite && !placeHolderStats.occupiedPiece.GetComponent<PieceStats>().isWhite)||(!draggedPiece.GetComponent<PieceStats>().isWhite && placeHolderStats.occupiedPiece.GetComponent<PieceStats>().isWhite))
                 return true;
         else
             return false;
