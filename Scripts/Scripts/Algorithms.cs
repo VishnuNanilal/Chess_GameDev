@@ -13,10 +13,10 @@ public class Algorithms : MonoBehaviour
 
     public void Start()
     {
-        isDiagonal = false;
-        isStraight = false;
+        //isDiagonal = false;
+        //isStraight = false;
         isSingleCellMove = false;
-        isKnightMove = false;
+        //isKnightMove = false;
         //isPawn = false;
     }
     public bool MovementPossible(int PHXPos,int PHYPos,GameObject currentPiece) //Passing the x,y positions of the PlaceHoolder to check if it's an available position.
@@ -28,16 +28,10 @@ public class Algorithms : MonoBehaviour
 
         Debug.Log(xDiff+" "+yDiff );
 
-        if (AlgorithCalc(xDiff, yDiff, currentPiece))
-        {
-            ResetMoveType();
+        if (AlgorithCalc(xDiff, yDiff,currentPiece))
             return true;
-        }
         else
-        {
-            ResetMoveType();
             return false;
-        }
     }
 
     public bool AlgorithCalc(int xDiff, int yDiff,GameObject currentPiece)
@@ -57,35 +51,12 @@ public class Algorithms : MonoBehaviour
         {
             case PieceStats.PieceType.King:
                 if (isSingleCellMove == true)
+                {
+                    ResetMoveType();
                     return true;
+                }
                 else
                     return false;
-
-            case PieceStats.PieceType.Queen:
-                if (isSingleCellMove || isDiagonal || isStraight)
-                    return true;
-                else
-                    return false;
-
-            case PieceStats.PieceType.Bishop:
-                if (isDiagonal)
-                    return true;
-                else
-                    return false;
-
-            case PieceStats.PieceType.Knight:
-                if (isKnightMove)
-                    return true;
-                else
-                    return false;
-
-
-            case PieceStats.PieceType.Rook:
-                if (isStraight)
-                    return true;
-                else
-                    return false;
-
             default:
                 return false;
                 
@@ -94,10 +65,10 @@ public class Algorithms : MonoBehaviour
 
     void ResetMoveType()
     {
-        isDiagonal = false;
-        isStraight = false;
+        //isDiagonal = false;
+        //isStraight = false;
         isSingleCellMove = false;
-        isKnightMove = false;
+        //isKnightMove = false;
         //isPawn = false;
     }
 }

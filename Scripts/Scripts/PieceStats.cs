@@ -17,7 +17,6 @@ public class PieceStats : MonoBehaviour
     }
 
     public PieceType pieceType;
-    public bool isWhite; //to see if the piece is white or not (black).
     public int initXpos;
     public int initYpos;
 
