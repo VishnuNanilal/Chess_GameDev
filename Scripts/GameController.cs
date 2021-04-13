@@ -6,27 +6,47 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
-    //public RayCastHandler rayCastHandler;
-
-    public GameObject activePiece = null; //The object we is the dragged piece
     public GameObject activePlaceHolder;  //The placeHolder from which we drag the piece is the current placeholder anytime.
-    public Transform[] placeHolderPositions = new Transform[64];
+    public PlaceHolderStats[,] placeHolderPositionArray = new PlaceHolderStats[8,8];
+    
 
     public bool isWhitesTurn;
-    public bool isCorrectTurn;
-
     public Image turnIndicator;
+
     private void Awake()
     {
-        instance = this;
+        if(instance==null)
+            instance = this;
+
         isWhitesTurn = true;
+
+        #region to take care of Array
+
+        for (int i=0;i<8;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+               placeHolderPositionArray[i, j] = gameObject.AddComponent<PlaceHolderStats>();
+            }
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            placeHolderPositionArray[i, 0].isOccupied =true;
+            placeHolderPositionArray[i, 1].isOccupied =true;  
+            placeHolderPositionArray[i, 6].isOccupied =true;
+            placeHolderPositionArray[i, 7].isOccupied =true;
+        }
+
+        #endregion
     }
-    
-    public bool CheckTurn()
+
+
+    public bool CheckTurn(GameObject draggedPiece)
     {
-        if (activePiece.GetComponent<PieceStats>().isWhite && GameController.instance.isWhitesTurn)
+        if (draggedPiece.GetComponent<PieceStats>().isWhite && GameController.instance.isWhitesTurn)
             return true;
-        else if (!activePiece.GetComponent<PieceStats>().isWhite && !GameController.instance.isWhitesTurn)
+        else if (!draggedPiece.GetComponent<PieceStats>().isWhite && !GameController.instance.isWhitesTurn)
             return true;
         else
             return false;
