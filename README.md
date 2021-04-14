@@ -9,4 +9,4 @@ NOTES:
 2. Try to complete in **2 weeks** maximum.
 3.  Upload on **Itch.io** after the game is completed adding to the **PortFolio**.
 
-Status: Completed on 13.04.2021 (20 days).
+Status: Completed on 13-04-2021 (20 days).
