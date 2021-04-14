@@ -8,3 +8,5 @@ NOTES:
 1. All mathematical calculations and algorithms will be developed by myself as much as possible.
 2. Try to complete in **2 weeks** maximum.
 3.  Upload on **Itch.io** after the game is completed adding to the **PortFolio**.
+
+Status: Completed on 13.04.2021 (20 days).
